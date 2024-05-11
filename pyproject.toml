@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "ingredient-stop-sales"
+version = "1.0.0"
+description = ""
+authors = ["Eldos <eldos.baktybekov@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "ingredient_stop_sales"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
