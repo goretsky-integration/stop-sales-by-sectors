@@ -3,6 +3,8 @@ import tomllib
 from dataclasses import dataclass
 from zoneinfo import ZoneInfo
 
+from enums import CountryCode
+
 __all__ = (
     'Config',
     'get_config',
@@ -15,6 +17,7 @@ CONFIG_FILE_PATH = pathlib.Path(__file__).parent.parent / "config.toml"
 class Config:
     app_name: str
     timezone: ZoneInfo
+    country_code: CountryCode
     units_storage_base_url: str
 
 
@@ -25,5 +28,6 @@ def get_config() -> Config:
     return Config(
         app_name=config['app']['name'],
         timezone=ZoneInfo(config['app']['timezone']),
+        country_code=CountryCode(config['app']['country_code']),
         units_storage_base_url=config['units_storage']['base_url'],
     )
