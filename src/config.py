@@ -11,11 +11,13 @@ __all__ = (
     'SOURCE_DIR',
     'CONFIG_FILE_PATH',
     'ACCOUNTS_UNITS_FILE_PATH',
+    'LOGGING_CONFIG_FILE_PATH',
 )
 
 SOURCE_DIR = pathlib.Path(__file__).parent
 CONFIG_FILE_PATH = SOURCE_DIR.parent / "config.toml"
 ACCOUNTS_UNITS_FILE_PATH = SOURCE_DIR.parent / 'accounts_units.json'
+LOGGING_CONFIG_FILE_PATH = SOURCE_DIR.parent / 'logging_config.json'
 
 
 @dataclass(frozen=True, slots=True)
