@@ -16,6 +16,10 @@ from dependencies import (
 from models import AccountUnits
 from time_helpers import Period
 from units import load_units
+from logger import create_logger
+
+
+logger = create_logger('main')
 
 
 @inject
@@ -60,6 +64,10 @@ async def main(
         from_date=period.from_date,
         to_date=period.to_date,
     )
+
+    logger.debug('Stop sales', extra={
+        'stop_sales': stop_sales,
+    })
 
 
 if __name__ == '__main__':
