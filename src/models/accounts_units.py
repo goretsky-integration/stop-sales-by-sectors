@@ -1,6 +1,6 @@
 from pydantic import BaseModel, conlist
 
-from models import Unit
+from models.units import Unit
 
 __all__ = ('AccountUnits',)
 
