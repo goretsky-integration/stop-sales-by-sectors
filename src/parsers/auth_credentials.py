@@ -1,4 +1,7 @@
+import json
+
 import httpx
+from pydantic import ValidationError
 
 from logger import create_logger
 from models import AccountTokens
@@ -9,5 +12,21 @@ logger = create_logger('parser')
 
 
 def parse_account_tokens_response(response: httpx.Response) -> AccountTokens:
-    response_data = response.json()
-    return AccountTokens.model_validate(response_data)
+    """Parse the response from the account tokens response."""
+    try:
+        response_data = response.json()
+    except json.JSONDecodeError:
+        logger.error(
+            'Failed to parse response data as JSON',
+            extra={'response_body': response.text},
+        )
+        raise
+
+    try:
+        return AccountTokens.model_validate(response_data)
+    except ValidationError:
+        logger.error(
+            'Failed to validate account tokens',
+            extra={'response_body': response_data},
+        )
+        raise
