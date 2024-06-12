@@ -8,9 +8,14 @@ from enums import CountryCode
 __all__ = (
     'Config',
     'get_config',
+    'SOURCE_DIR',
+    'CONFIG_FILE_PATH',
+    'ACCOUNTS_UNITS_FILE_PATH',
 )
 
-CONFIG_FILE_PATH = pathlib.Path(__file__).parent.parent / "config.toml"
+SOURCE_DIR = pathlib.Path(__file__).parent
+CONFIG_FILE_PATH = SOURCE_DIR.parent / "config.toml"
+ACCOUNTS_UNITS_FILE_PATH = SOURCE_DIR.parent / 'accounts_units.json'
 
 
 @dataclass(frozen=True, slots=True)
@@ -19,6 +24,7 @@ class Config:
     timezone: ZoneInfo
     country_code: CountryCode
     units_storage_base_url: str
+    auth_credentials_storage_base_url: str
 
 
 def get_config() -> Config:
@@ -30,4 +36,7 @@ def get_config() -> Config:
         timezone=ZoneInfo(config['app']['timezone']),
         country_code=CountryCode(config['app']['country_code']),
         units_storage_base_url=config['units_storage']['base_url'],
+        auth_credentials_storage_base_url=(
+            config['auth_credentials_storage']['base_url']
+        ),
     )
