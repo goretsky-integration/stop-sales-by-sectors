@@ -9,4 +9,3 @@ class Unit(BaseModel):
     id: int
     name: str
     uuid: UUID
-    dodo_is_api_account_name: str
