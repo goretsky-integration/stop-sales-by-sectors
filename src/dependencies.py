@@ -1,4 +1,4 @@
-from collections.abc import Generator
+from collections.abc import AsyncGenerator
 
 import httpx
 from fast_depends import Depends
@@ -21,11 +21,14 @@ __all__ = (
 )
 
 
-def get_dodo_is_http_client(
+async def get_dodo_is_http_client(
         config: Config = Depends(get_config),
-) -> Generator[DodoISHttpClient, None, None]:
+) -> AsyncGenerator[DodoISHttpClient, None]:
     base_url = f'https://api.dodois.io/dodopizza/{config.country_code}/'
-    with httpx.AsyncClient(base_url=base_url) as http_client:
+    async with httpx.AsyncClient(
+            base_url=base_url,
+            timeout=60,
+    ) as http_client:
         yield DodoISHttpClient(http_client)
 
 
@@ -35,11 +38,11 @@ def get_dodo_is_connection(
     return DodoIsConnection(http_client)
 
 
-def get_auth_credentials_storage_http_client(
+async def get_auth_credentials_storage_http_client(
         config: Config = Depends(get_config),
-) -> Generator[AuthCredentialsStorageHttpClient, None, None]:
+) -> AsyncGenerator[AuthCredentialsStorageHttpClient, None]:
     base_url = config.auth_credentials_storage_base_url
-    with httpx.Client(base_url=base_url) as http_client:
+    async with httpx.AsyncClient(base_url=base_url) as http_client:
         yield AuthCredentialsStorageHttpClient(http_client)
 
 
