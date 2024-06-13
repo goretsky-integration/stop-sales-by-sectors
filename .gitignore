@@ -321,3 +321,5 @@ cython_debug/
 .idea/
 
 config.toml
+
+logging_config.json
