@@ -9,7 +9,7 @@ from new_types import DodoISHttpClient
 
 __all__ = ('build_request_query_params', 'DodoIsConnection')
 
-logger = create_logger('dodo_is_connection')
+logger = create_logger('dodo_is_api')
 
 
 def build_request_query_params(

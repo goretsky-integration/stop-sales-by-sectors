@@ -13,11 +13,10 @@ from dependencies import (
     get_auth_credentials_storage_connection,
     get_dodo_is_connection,
 )
+from logger import create_logger
 from models import AccountUnits
 from time_helpers import Period
 from units import load_units
-from logger import create_logger
-
 
 logger = create_logger('main')
 

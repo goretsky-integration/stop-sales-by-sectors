@@ -5,8 +5,7 @@ from new_types import AuthCredentialsStorageHttpClient
 
 __all__ = ('AuthCredentialsStorageConnection',)
 
-
-logger = create_logger('auth_credentials_storage_connection')
+logger = create_logger('auth_credentials')
 
 
 class AuthCredentialsStorageConnection:
