@@ -13,7 +13,7 @@ from dependencies import (
     get_auth_credentials_storage_connection,
     get_dodo_is_connection,
 )
-from logger import create_logger
+from logger import create_logger, setup_logging
 from models import AccountUnits
 from time_helpers import Period
 from units import load_units
@@ -30,6 +30,8 @@ async def main(
         accounts_units: list[AccountUnits] = Depends(load_units),
         config: Config = Depends(get_config),
 ) -> None:
+    setup_logging()
+
     period = Period.today_to_this_moment(timezone=config.timezone)
 
     auth_credentials_fetch_unit_of_work = AuthCredentialsFetchUnitOfWork(

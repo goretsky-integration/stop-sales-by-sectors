@@ -13,6 +13,10 @@ logger = create_logger('parser')
 
 def parse_account_tokens_response(response: httpx.Response) -> AccountTokens:
     """Parse the response from the account tokens response."""
+    logger.info(
+        'Parsing account tokens response',
+        extra={'response_body': response.text}
+    )
     try:
         response_data = response.json()
     except json.JSONDecodeError:

@@ -14,13 +14,16 @@ logger = create_logger('parser')
 def parse_stop_sales_by_ingredients_response(
         response: httpx.Response,
 ) -> list[StopSaleByIngredient]:
-    logger.debug('Parsing stop sales by ingredients response')
+    logger.info(
+        'Parsing account tokens response',
+        extra={'response_body': response.text}
+    )
     try:
         response_data = response.json()
     except json.JSONDecodeError:
         logger.error(
             'Failed to parse response JSON',
-            extra={'body': response.text}
+            extra={'response_body': response.text}
         )
         raise
 
@@ -33,6 +36,6 @@ def parse_stop_sales_by_ingredients_response(
     except ValidationError:
         logger.error(
             'Failed to parse stop sales by ingredients [pydantic]',
-            extra={'body': response.text}
+            extra={'response_body': response.text}
         )
         raise
