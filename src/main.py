@@ -7,8 +7,8 @@ from connections.auth_credentials_storage import (
     AuthCredentialsStorageConnection,
 )
 from connections.dodo_is import DodoIsConnection
-from context.auth_credentials_storage import AuthCredentialsFetchUnitOfWork
-from context.dodo_is import StopSalesFetchUnitOfWork
+from context.auth_credentials_storage import AuthCredentialsFetcher
+from context.dodo_is import StopSalesFetcher
 from dependencies import (
     get_auth_credentials_storage_connection,
     get_dodo_is_connection,
@@ -34,21 +34,21 @@ async def main(
 
     period = Period.today_to_this_moment(timezone=config.timezone)
 
-    auth_credentials_fetch_unit_of_work = AuthCredentialsFetchUnitOfWork(
+    auth_credentials_fetch_unit_of_work = AuthCredentialsFetcher(
         connection=auth_credentials_connection,
     )
     for account_units in accounts_units:
-        auth_credentials_fetch_unit_of_work.register_task(
+        auth_credentials_fetch_unit_of_work.register_account_name(
             account_name=account_units.account_name,
         )
 
-    accounts_tokens = await auth_credentials_fetch_unit_of_work.commit()
+    accounts_tokens = await auth_credentials_fetch_unit_of_work.fetch_all()
     account_name_to_access_token = {
         account_tokens.account_name: account_tokens.access_token
         for account_tokens in accounts_tokens
     }
 
-    stop_sales_fetch_unit_of_work = StopSalesFetchUnitOfWork(
+    stop_sales_fetch_unit_of_work = StopSalesFetcher(
         connection=dodo_is_connection,
     )
 
@@ -61,7 +61,7 @@ async def main(
             unit_uuids=unit_uuids,
         )
 
-    stop_sales = await stop_sales_fetch_unit_of_work.commit(
+    stop_sales = await stop_sales_fetch_unit_of_work.fetch_all(
         from_date=period.from_date,
         to_date=period.to_date,
     )

@@ -15,7 +15,7 @@ from parsers.stop_sales_by_ingredients import (
     parse_stop_sales_by_ingredients_response,
 )
 
-__all__ = ('StopSalesFetchUnitOfWork',)
+__all__ = ('StopSalesFetcher',)
 
 logger = create_logger('dodo_is_api')
 
@@ -35,11 +35,11 @@ class StopSalesFetchAllResult:
     error_unit_uuids: set[UUID]
 
 
-class StopSalesFetchUnitOfWork:
+class StopSalesFetcher:
 
     def __init__(self, connection: DodoIsConnection):
         self.__connection = connection
-        self.__tasks: set[AccessTokenAndUnitUuids] = set()
+        self.__tasks_registry: set[AccessTokenAndUnitUuids] = set()
 
     def register_task(
             self,
@@ -48,7 +48,7 @@ class StopSalesFetchUnitOfWork:
             unit_uuids: Iterable[UUID],
     ) -> None:
         for unit_uuids_batch in batched(unit_uuids, batch_size=30):
-            self.__tasks.add((access_token, tuple(unit_uuids_batch)))
+            self.__tasks_registry.add((access_token, tuple(unit_uuids_batch)))
 
     async def _get_units_stop_sales(
             self,
@@ -94,14 +94,14 @@ class StopSalesFetchUnitOfWork:
             stop_sales=stop_sales,
         )
 
-    async def commit(
+    async def fetch_all(
             self,
             from_date: datetime,
             to_date: datetime,
     ) -> StopSalesFetchAllResult:
         tasks: list[asyncio.Task[StopSalesFetchResult]] = []
         async with asyncio.TaskGroup() as task_group:
-            for access_token, unit_uuids in self.__tasks:
+            for access_token, unit_uuids in self.__tasks_registry:
                 task = self._get_units_stop_sales(
                     access_token=access_token,
                     unit_uuids=unit_uuids,
