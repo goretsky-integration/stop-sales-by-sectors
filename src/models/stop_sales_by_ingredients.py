@@ -29,5 +29,3 @@ class StopSaleByIngredient(BaseModel):
         UUID | None,
         Field(validation_alias='resumedByUserId'),
     ]
-    started_at: Annotated[datetime, Field(validation_alias='startedAt')]
-    ended_at: Annotated[datetime | None, Field(validation_alias='endedAt')]
