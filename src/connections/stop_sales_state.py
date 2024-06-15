@@ -47,4 +47,4 @@ class StopSalesStateManager:
         stop_sale_ids = [stop_sale.id.hex for stop_sale in stop_sales]
 
         await self.__redis_client.sadd(self.key, *stop_sale_ids)
-        await self.__redis_client.expireat(self.key, reset_time, nx=True)
+        await self.__redis_client.expireat(self.key, reset_time)
