@@ -1,12 +1,14 @@
-from datetime import datetime
-from typing import Protocol
+from collections.abc import Iterable
 
-__all__ = ('is_not_ended',)
+from models import StopSaleByIngredient
 
-
-class HasEndedAt(Protocol):
-    ended_at: datetime | None
+__all__ = ('filter_not_ended_stop_sales',)
 
 
-def is_not_ended(item: HasEndedAt) -> bool:
-    return item.ended_at is None
+def filter_not_ended_stop_sales(
+        stop_sales: Iterable[StopSaleByIngredient],
+) -> list[StopSaleByIngredient]:
+    return [
+        stop_sale for stop_sale in stop_sales
+        if stop_sale.ended_at_local is None
+    ]
