@@ -28,6 +28,7 @@ class Config:
     units_storage_base_url: str
     auth_credentials_storage_base_url: str
     message_queue_url: str
+    redis_url: str
 
 
 def get_config() -> Config:
@@ -43,4 +44,5 @@ def get_config() -> Config:
             config['auth_credentials_storage']['base_url']
         ),
         message_queue_url=config['message_queue']['url'],
+        redis_url=config['redis']['url'],
     )

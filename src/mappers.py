@@ -4,11 +4,11 @@ from typing import TypeAlias
 from uuid import UUID
 
 from models import (
-    Event,
+    AccountUnits, Event,
     EventPayloadStopSale,
     EventPayloadStopSalesGroupedByReason,
     EventPayloadUnitStopSales,
-    StopSaleByIngredient,
+    StopSaleByIngredient, Unit,
 )
 
 __all__ = (
@@ -16,6 +16,8 @@ __all__ = (
     'map_events_payload_stop_sales_grouped_by_reason',
     'group_stop_sales_by_reason',
     'group_stop_sales_by_unit_uuid_and_name',
+    'include_empty_units',
+    'map_accounts_units_to_units',
 )
 
 UnitUUIDAndName: TypeAlias = tuple[UUID, str]
@@ -105,3 +107,36 @@ def map_stop_sales_to_events(
         result.append(event)
 
     return result
+
+
+def include_empty_units(
+        *,
+        events: Iterable[Event],
+        units: Iterable[Unit],
+) -> list[Event]:
+    events = list(events)
+    existing_units = {event.unit_ids for event in events}
+
+    empty_events: list[Event] = []
+    for unit in units:
+        if unit.uuid not in existing_units:
+            event = Event(
+                unit_ids=unit.uuid,
+                payload=EventPayloadUnitStopSales(
+                    unit_name=unit.name,
+                    stop_sales_grouped_by_reasons=[],
+                ),
+            )
+            empty_events.append(event)
+
+    return events + empty_events
+
+
+def map_accounts_units_to_units(
+        accounts_units: Iterable[AccountUnits],
+) -> list[Unit]:
+    return [
+        unit
+        for account_units in accounts_units
+        for unit in account_units.units
+    ]
