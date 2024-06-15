@@ -4,15 +4,15 @@ from uuid import UUID
 
 from pydantic import BaseModel, Field
 
-__all__ = ('StopSaleByIngredient',)
+__all__ = ('StopSaleBySector',)
 
 
-class StopSaleByIngredient(BaseModel):
+class StopSaleBySector(BaseModel):
     id: UUID
     unit_uuid: Annotated[UUID, Field(validation_alias='unitId')]
     unit_name: Annotated[str, Field(validation_alias='unitName')]
-    ingredient_name: Annotated[str, Field(validation_alias='ingredientName')]
-    reason: str
+    sector_name: Annotated[str, Field(validation_alias='sectorName')]
+    is_sub_sector: Annotated[bool, Field(validation_alias='isSubSector')]
     started_at_local: Annotated[
         datetime,
         Field(validation_alias='startedAtLocal'),
@@ -21,11 +21,11 @@ class StopSaleByIngredient(BaseModel):
         datetime | None,
         Field(validation_alias='endedAtLocal'),
     ]
-    stopped_by_user_id: Annotated[
+    suspended_by_user_id: Annotated[
         UUID,
-        Field(validation_alias='stoppedByUserId'),
+        Field(validation_alias='suspendedByUserId'),
     ]
     resumed_by_user_id: Annotated[
         UUID | None,
-        Field(validation_alias='resumedByUserId'),
+        Field(validation_alias='resumedUserId'),
     ]

@@ -4,11 +4,13 @@ from typing import TypeAlias
 from uuid import UUID
 
 from models import (
-    AccountUnits, Event,
+    AccountUnits,
+    Event,
     EventPayloadStopSale,
     EventPayloadStopSalesGroupedByReason,
     EventPayloadUnitStopSales,
-    StopSaleByIngredient, Unit,
+    StopSaleBySector,
+    Unit,
 )
 
 __all__ = (
@@ -21,8 +23,8 @@ __all__ = (
 )
 
 UnitUUIDAndName: TypeAlias = tuple[UUID, str]
-StopSalesByIngredients: TypeAlias = Iterable[StopSaleByIngredient]
-StopSalesByIngredientsList: TypeAlias = list[StopSaleByIngredient]
+StopSalesByIngredients: TypeAlias = Iterable[StopSaleBySector]
+StopSalesByIngredientsList: TypeAlias = list[StopSaleBySector]
 
 
 def group_stop_sales_by_reason(
@@ -40,9 +42,9 @@ def group_stop_sales_by_reason(
 
 def group_stop_sales_by_unit_uuid_and_name(
         stop_sales: StopSalesByIngredients,
-) -> dict[UnitUUIDAndName, list[StopSaleByIngredient]]:
+) -> dict[UnitUUIDAndName, list[StopSaleBySector]]:
     unit_uuid_and_name_to_stop_sales: (
-        defaultdict[UnitUUIDAndName, list[StopSaleByIngredient]]
+        defaultdict[UnitUUIDAndName, list[StopSaleBySector]]
     ) = defaultdict(list)
 
     for stop_sale in stop_sales:

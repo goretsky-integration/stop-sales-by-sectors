@@ -1,4 +1,4 @@
-# Ingredient Stop Sales
+# Sectors Stop Sales
 
 ---
 
@@ -13,4 +13,4 @@
 ---
 
 # Where data come from?
-Stop sales by ingredients API endpoint: https://docs.dodois.io/docs/dodo-is/846af18915ab3-proizvodstvo-stop-prodazhi-po-ingredientam
+Stop sales by sectors API endpoint: https://docs.dodois.io/docs/dodo-is/846af18915ab3-proizvodstvo-stop-prodazhi-po-ingredientam

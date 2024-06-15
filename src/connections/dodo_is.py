@@ -38,7 +38,7 @@ class DodoIsConnection:
             to_date: datetime.datetime,
             access_token: str,
     ) -> httpx.Response:
-        url = '/production/stop-sales-ingredients'
+        url = '/delivery/stop-sales-sectors'
         query_params = build_request_query_params(
             unit_uuids=unit_uuids,
             from_date=from_date,
@@ -47,7 +47,7 @@ class DodoIsConnection:
         headers = {'Authorization': f'Bearer {access_token}'}
 
         logger.debug(
-            'Retrieving stop sales by ingredients from Dodo IS',
+            'Retrieving stop sales by sectors from Dodo IS',
             extra={'query_params': query_params},
         )
         response = await self.__http_client.get(
@@ -57,7 +57,7 @@ class DodoIsConnection:
         )
 
         logger.debug(
-            'Retrieved stop sales by ingredients from Dodo IS',
+            'Retrieved stop sales by sectors from Dodo IS',
             extra={'status_code': response.status_code},
         )
 

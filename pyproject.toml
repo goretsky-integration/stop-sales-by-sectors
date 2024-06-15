@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "stop-sales-by-ingredients"
+name = "stop-sales-by-sectors"
 version = "1.0.0"
 description = ""
 authors = ["Eldos <eldos.baktybekov@gmail.com>"]

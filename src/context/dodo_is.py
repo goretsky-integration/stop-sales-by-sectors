@@ -9,7 +9,7 @@ from pydantic import SecretStr
 
 from connections.dodo_is import DodoIsConnection
 from logger import create_logger
-from models import StopSaleByIngredient
+from models import StopSaleBySector
 from more_itertools import batched
 from parsers.stop_sales_by_ingredients import (
     parse_stop_sales_by_ingredients_response,
@@ -25,13 +25,13 @@ AccessTokenAndUnitUuids: TypeAlias = tuple[SecretStr, Iterable[UUID]]
 @dataclass(frozen=True, slots=True)
 class StopSalesFetchResult:
     unit_uuids: list[UUID]
-    stop_sales: list[StopSaleByIngredient] | None = None
+    stop_sales: list[StopSaleBySector] | None = None
     exception: Exception | None = None
 
 
 @dataclass(frozen=True, slots=True)
 class StopSalesFetchAllResult:
-    stop_sales: list[StopSaleByIngredient]
+    stop_sales: list[StopSaleBySector]
     error_unit_uuids: set[UUID]
 
 
@@ -60,7 +60,7 @@ class StopSalesFetcher:
     ) -> StopSalesFetchResult:
         unit_uuids = list(unit_uuids)
 
-        stop_sales: list[StopSaleByIngredient] = []
+        stop_sales: list[StopSaleBySector] = []
 
         try:
             logger.debug(
@@ -110,7 +110,7 @@ class StopSalesFetcher:
                 )
                 tasks.append(task_group.create_task(task))
 
-        stop_sales: list[StopSaleByIngredient] = []
+        stop_sales: list[StopSaleBySector] = []
         error_unit_uuids: set[UUID] = set()
         for task in tasks:
             result = task.result()

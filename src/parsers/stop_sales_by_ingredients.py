@@ -4,7 +4,7 @@ import httpx
 from pydantic import TypeAdapter, ValidationError
 
 from logger import create_logger
-from models import StopSaleByIngredient
+from models import StopSaleBySector
 
 __all__ = ('parse_stop_sales_by_ingredients_response',)
 
@@ -13,7 +13,7 @@ logger = create_logger('parser')
 
 def parse_stop_sales_by_ingredients_response(
         response: httpx.Response,
-) -> list[StopSaleByIngredient]:
+) -> list[StopSaleBySector]:
     logger.info(
         'Parsing account tokens response',
         extra={'response_body': response.text}
@@ -27,7 +27,7 @@ def parse_stop_sales_by_ingredients_response(
         )
         raise
 
-    type_adapter = TypeAdapter(list[StopSaleByIngredient])
+    type_adapter = TypeAdapter(list[StopSaleBySector])
 
     try:
         return type_adapter.validate_python(

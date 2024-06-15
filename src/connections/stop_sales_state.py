@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 
 import redis.asyncio as redis
 
-from models import StopSaleByIngredient
+from models import StopSaleBySector
 
 __all__ = ('compute_state_reset_time', 'StopSalesStateManager')
 
@@ -26,9 +26,9 @@ class StopSalesStateManager:
         self.__redis_client = redis_client
         self.__timezone = timezone
 
-    async def filter(self, stop_sales: Iterable[StopSaleByIngredient]):
+    async def filter(self, stop_sales: Iterable[StopSaleBySector]):
         """Filter out stop sales that are already in the state."""
-        result: list[StopSaleByIngredient] = []
+        result: list[StopSaleBySector] = []
 
         for stop_sale in stop_sales:
             is_exist = await self.__redis_client.sismember(
@@ -41,7 +41,7 @@ class StopSalesStateManager:
 
         return result
 
-    async def save(self, stop_sales: Iterable[StopSaleByIngredient]) -> None:
+    async def save(self, stop_sales: Iterable[StopSaleBySector]) -> None:
         """Save stop sales to the state."""
         reset_time = compute_state_reset_time(self.__timezone)
         stop_sale_ids = [stop_sale.id.hex for stop_sale in stop_sales]
