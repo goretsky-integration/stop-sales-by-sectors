@@ -27,6 +27,7 @@ class Config:
     country_code: CountryCode
     units_storage_base_url: str
     auth_credentials_storage_base_url: str
+    message_queue_url: str
 
 
 def get_config() -> Config:
@@ -41,4 +42,5 @@ def get_config() -> Config:
         auth_credentials_storage_base_url=(
             config['auth_credentials_storage']['base_url']
         ),
+        message_queue_url=config['message_queue']['url'],
     )
