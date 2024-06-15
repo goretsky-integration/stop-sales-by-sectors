@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "stop-sales-by-ingredients"
+version = "1.0.0"
+description = ""
+authors = ["Eldos <eldos.baktybekov@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "ingredient_stop_sales"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+faststream = {extras = ["rabbit"], version = "^0.5.12"}
+httpx = "^0.27.0"
+python-json-logger = "^2.0.7"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
