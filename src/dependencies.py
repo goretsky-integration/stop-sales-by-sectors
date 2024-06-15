@@ -2,12 +2,14 @@ from collections.abc import AsyncGenerator
 
 import httpx
 from fast_depends import Depends
+from faststream.rabbit import RabbitBroker
 
 from config import Config, get_config
 from connections.auth_credentials_storage import (
     AuthCredentialsStorageConnection,
 )
 from connections.dodo_is import DodoIsConnection
+from connections.event_publisher import EventPublisher
 from new_types import (
     AuthCredentialsStorageHttpClient,
     DodoISHttpClient,
@@ -18,6 +20,8 @@ __all__ = (
     'get_dodo_is_connection',
     'get_auth_credentials_storage_http_client',
     'get_auth_credentials_storage_connection',
+    'get_message_queue_broker',
+    'get_event_publisher',
 )
 
 
@@ -52,3 +56,16 @@ def get_auth_credentials_storage_connection(
         ),
 ):
     return AuthCredentialsStorageConnection(http_client)
+
+
+async def get_message_queue_broker(
+        config: Config = Depends(get_config),
+) -> AsyncGenerator[RabbitBroker, None]:
+    async with RabbitBroker(config.message_queue_url) as broker:
+        yield broker
+
+
+def get_event_publisher(
+        broker: RabbitBroker = Depends(get_message_queue_broker),
+):
+    return EventPublisher(broker)
