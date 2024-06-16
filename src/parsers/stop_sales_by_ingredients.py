@@ -6,12 +6,12 @@ from pydantic import TypeAdapter, ValidationError
 from logger import create_logger
 from models import StopSaleBySector
 
-__all__ = ('parse_stop_sales_by_ingredients_response',)
+__all__ = ('parse_stop_sales_by_sectors_response',)
 
 logger = create_logger('parser')
 
 
-def parse_stop_sales_by_ingredients_response(
+def parse_stop_sales_by_sectors_response(
         response: httpx.Response,
 ) -> list[StopSaleBySector]:
     logger.info(
@@ -31,7 +31,7 @@ def parse_stop_sales_by_ingredients_response(
 
     try:
         return type_adapter.validate_python(
-            response_data['stopSalesByIngredients'],
+            response_data['stopSalesBySectors'],
         )
     except ValidationError:
         logger.error(

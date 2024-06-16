@@ -12,7 +12,7 @@ from logger import create_logger
 from models import StopSaleBySector
 from more_itertools import batched
 from parsers.stop_sales_by_ingredients import (
-    parse_stop_sales_by_ingredients_response,
+    parse_stop_sales_by_sectors_response,
 )
 
 __all__ = ('StopSalesFetcher',)
@@ -81,7 +81,7 @@ class StopSalesFetcher:
                 },
             )
 
-            stop_sales += parse_stop_sales_by_ingredients_response(response)
+            stop_sales += parse_stop_sales_by_sectors_response(response)
 
         except Exception as error:
             return StopSalesFetchResult(
@@ -96,8 +96,7 @@ class StopSalesFetcher:
 
     async def fetch_all(
             self,
-            from_date: datetime,
-            to_date: datetime,
+            period,
     ) -> StopSalesFetchAllResult:
         tasks: list[asyncio.Task[StopSalesFetchResult]] = []
         async with asyncio.TaskGroup() as task_group:
@@ -105,8 +104,8 @@ class StopSalesFetcher:
                 task = self._get_units_stop_sales(
                     access_token=access_token,
                     unit_uuids=unit_uuids,
-                    from_date=from_date,
-                    to_date=to_date,
+                    from_date=period.from_date,
+                    to_date=period.to_date,
                 )
                 tasks.append(task_group.create_task(task))
 

@@ -25,10 +25,8 @@ class Config:
     app_name: str
     timezone: ZoneInfo
     country_code: CountryCode
-    units_storage_base_url: str
     auth_credentials_storage_base_url: str
     message_queue_url: str
-    redis_url: str
 
 
 def get_config() -> Config:
@@ -39,10 +37,8 @@ def get_config() -> Config:
         app_name=config['app']['name'],
         timezone=ZoneInfo(config['app']['timezone']),
         country_code=CountryCode(config['app']['country_code']),
-        units_storage_base_url=config['units_storage']['base_url'],
         auth_credentials_storage_base_url=(
             config['auth_credentials_storage']['base_url']
         ),
         message_queue_url=config['message_queue']['url'],
-        redis_url=config['redis']['url'],
     )

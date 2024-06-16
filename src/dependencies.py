@@ -11,7 +11,6 @@ from connections.auth_credentials_storage import (
 )
 from connections.dodo_is import DodoIsConnection
 from connections.event_publisher import EventPublisher
-from connections.stop_sales_state import StopSalesStateManager
 from new_types import (
     AuthCredentialsStorageHttpClient,
     DodoISHttpClient,
@@ -25,7 +24,6 @@ __all__ = (
     'get_message_queue_broker',
     'get_event_publisher',
     'get_redis',
-    'get_stop_sales_state_manager',
 )
 
 
@@ -33,9 +31,11 @@ async def get_dodo_is_http_client(
         config: Config = Depends(get_config),
 ) -> AsyncGenerator[DodoISHttpClient, None]:
     base_url = f'https://api.dodois.io/dodopizza/{config.country_code}/'
+    headers = {'User-Agent': config.app_name}
     async with httpx.AsyncClient(
             base_url=base_url,
             timeout=60,
+            headers=headers,
     ) as http_client:
         yield DodoISHttpClient(http_client)
 
@@ -80,13 +80,3 @@ async def get_redis(
 ) -> AsyncGenerator[redis.Redis, None]:
     async with redis.from_url(config.redis_url) as redis_client:
         yield redis_client
-
-
-async def get_stop_sales_state_manager(
-        config: Config = Depends(get_config),
-        redis_client: redis.Redis = Depends(get_redis),
-) -> StopSalesStateManager:
-    return StopSalesStateManager(
-        redis_client=redis_client,
-        timezone=config.timezone,
-    )
